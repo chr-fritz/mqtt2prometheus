@@ -2,7 +2,6 @@ package config
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"regexp"
 	"sort"
@@ -188,7 +187,7 @@ func (mc *MetricConfig) DynamicLabelsKeys() []string {
 }
 
 func LoadConfig(configFile string, logger *zap.Logger) (Config, error) {
-	configData, err := ioutil.ReadFile(configFile)
+	configData, err := os.ReadFile(configFile)
 	if err != nil {
 		return Config{}, err
 	}
