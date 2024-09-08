@@ -1,5 +1,6 @@
 # This is an example goreleaser.yaml file with some sane defaults.
 # Make sure to check the documentation at http://goreleaser.com
+version: 2
 before:
   hooks:
     # You may remove this if you don't use go modules.
@@ -38,7 +39,8 @@ archives:
 checksum:
   name_template: 'checksums.txt'
 snapshot:
-  name_template: "{{ .Tag }}-next"
+  version_template: "{{ .Version }}-next"
+
 changelog:
   sort: asc
   filters:
@@ -55,7 +57,7 @@ dockers:
     build_flag_templates:
       - "--platform=linux/amd64"
     image_templates:
-      - "ghcr.io/{{ .Env.GITHUB_REPOSITORY_OWNER }}/mqtt2prometheus:{{ .Tag }}-amd64"
+      - "ghcr.io/{{ .Env.GITHUB_REPOSITORY_OWNER }}/mqtt2prometheus:{{ .Version }}-amd64"
 
   - dockerfile: release/Dockerfile.scratch
     goos: linux
@@ -64,17 +66,17 @@ dockers:
     build_flag_templates:
       - "--platform=linux/arm64"
     image_templates:
-      - "ghcr.io/{{ .Env.GITHUB_REPOSITORY_OWNER }}/mqtt2prometheus:{{ .Tag }}-arm64"
+      - "ghcr.io/{{ .Env.GITHUB_REPOSITORY_OWNER }}/mqtt2prometheus:{{ .Version }}-arm64"
 
 docker_manifests:
   # Github Registry
-  - name_template: ghcr.io/{{ .Env.GITHUB_REPOSITORY_OWNER }}/mqtt2prometheus:{{ .Tag }}
+  - name_template: ghcr.io/{{ .Env.GITHUB_REPOSITORY_OWNER }}/mqtt2prometheus:{{ .Version }}
     image_templates:
-      - "ghcr.io/{{ .Env.GITHUB_REPOSITORY_OWNER }}/mqtt2prometheus:{{ .Tag }}-amd64"
-      - "ghcr.io/{{ .Env.GITHUB_REPOSITORY_OWNER }}/mqtt2prometheus:{{ .Tag }}-arm64"
+      - "ghcr.io/{{ .Env.GITHUB_REPOSITORY_OWNER }}/mqtt2prometheus:{{ .Version }}-amd64"
+      - "ghcr.io/{{ .Env.GITHUB_REPOSITORY_OWNER }}/mqtt2prometheus:{{ .Version }}-arm64"
 
   - name_template: ghcr.io/{{ .Env.GITHUB_REPOSITORY_OWNER }}/mqtt2prometheus:latest
     skip_push: auto
     image_templates:
-      - "ghcr.io/{{ .Env.GITHUB_REPOSITORY_OWNER }}/mqtt2prometheus:{{ .Tag }}-amd64"
-      - "ghcr.io/{{ .Env.GITHUB_REPOSITORY_OWNER }}/mqtt2prometheus:{{ .Tag }}-arm64"
+      - "ghcr.io/{{ .Env.GITHUB_REPOSITORY_OWNER }}/mqtt2prometheus:{{ .Version }}-amd64"
+      - "ghcr.io/{{ .Env.GITHUB_REPOSITORY_OWNER }}/mqtt2prometheus:{{ .Version }}-arm64"
