@@ -1,6 +1,6 @@
 on:
   push:
-    branches: ["master"]
+    branches: [ "main" ]
   pull_request:
 name: tests
 jobs:
@@ -16,17 +16,22 @@ jobs:
       uses: actions/setup-go@v5
       with:
         go-version: ${{ matrix.go-version }}
+
     - name: Checkout code
       uses: actions/checkout@v4
+
     - name: Test
       run: go test ./...
+
     - name: Vet
       run: go vet ./...
+
   linting:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
@@ -58,4 +63,4 @@ jobs:
         uses: goreleaser/goreleaser-action@v6
         with:
           version: '~> v2'
-          args: release --clean --skip=publish
+          args: release --clean --snapshot --skip announce
