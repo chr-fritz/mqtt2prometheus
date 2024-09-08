@@ -2,7 +2,6 @@ package config
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"regexp"
 	"time"
@@ -170,7 +169,7 @@ func (mc *MetricConfig) PrometheusValueType() prometheus.ValueType {
 }
 
 func LoadConfig(configFile string) (Config, error) {
-	configData, err := ioutil.ReadFile(configFile)
+	configData, err := os.ReadFile(configFile)
 	if err != nil {
 		return Config{}, err
 	}
