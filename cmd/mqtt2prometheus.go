@@ -14,8 +14,8 @@ import (
 	"go.uber.org/zap/zapcore"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
-	"github.com/go-kit/kit/log"
 	kitzap "github.com/go-kit/kit/log/zap"
+	"github.com/go-kit/log"
 	"github.com/hikhvar/mqtt2prometheus/pkg/config"
 	"github.com/hikhvar/mqtt2prometheus/pkg/metrics"
 	"github.com/hikhvar/mqtt2prometheus/pkg/mqttclient"
