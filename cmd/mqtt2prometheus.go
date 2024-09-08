@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"os"
 	"time"
@@ -85,24 +84,24 @@ func main() {
 		logger.Fatal("Could not load config", zap.Error(err))
 	}
 
-	mqtt_user := os.Getenv("MQTT2PROM_MQTT_USER")
-	if mqtt_user != "" {
-		cfg.MQTT.User = mqtt_user
+	mqttUser := os.Getenv("MQTT2PROM_MQTT_USER")
+	if mqttUser != "" {
+		cfg.MQTT.User = mqttUser
 	}
 
-	mqtt_password := os.Getenv("MQTT2PROM_MQTT_PASSWORD")
+	mqttPassword := os.Getenv("MQTT2PROM_MQTT_PASSWORD")
 	if *usePasswordFromFile {
-		if mqtt_password == "" {
+		if mqttPassword == "" {
 			logger.Fatal("MQTT2PROM_MQTT_PASSWORD is required")
 		}
-		secret, err := ioutil.ReadFile(mqtt_password)
+		secret, err := os.ReadFile(mqttPassword)
 		if err != nil {
 			logger.Fatal("unable to read mqtt password from secret file", zap.Error(err))
 		}
 		cfg.MQTT.Password = string(secret)
 	} else {
-		if mqtt_password != "" {
-			cfg.MQTT.Password = mqtt_password
+		if mqttPassword != "" {
+			cfg.MQTT.Password = mqttPassword
 		}
 	}
 
@@ -159,7 +158,7 @@ func main() {
 		Handler: http.DefaultServeMux,
 	}
 	go func() {
-		err = web.ListenAndServe(s, *webConfigFlag, setupGoKitLogger(logger))
+		err = web.ListenAndServe(s, &web.FlagConfig{WebConfigFile: webConfigFlag}, setupGoKitLogger(logger))
 		if err != nil {
 			logger.Fatal("Error while serving http", zap.Error(err))
 		}
@@ -245,7 +244,7 @@ func setupExtractor(cfg config.Config) (metrics.Extractor, error) {
 func newTLSConfig(cfg config.Config) (*tls.Config, error) {
 	certpool := x509.NewCertPool()
 	if cfg.MQTT.CACert != "" {
-		pemCerts, err := ioutil.ReadFile(cfg.MQTT.CACert)
+		pemCerts, err := os.ReadFile(cfg.MQTT.CACert)
 		if err != nil {
 			return nil, fmt.Errorf("failed to load ca_cert file: %w", err)
 		}
