@@ -1,12 +1,9 @@
 module github.com/hikhvar/mqtt2prometheus
 
 go 1.22.0
-
-toolchain go1.22.6
-
 require (
 	github.com/eclipse/paho.mqtt.golang v1.5.0
-	github.com/expr-lang/expr v1.16.9
+	github.com/expr-lang/expr v1.17.0
 	github.com/go-kit/kit v0.13.0
 	github.com/go-kit/log v0.2.1
 	github.com/patrickmn/go-cache v2.1.0+incompatible
