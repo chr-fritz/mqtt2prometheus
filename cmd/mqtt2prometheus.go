@@ -6,16 +6,16 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"log/slog"
 	"net/http"
 	"os"
 	"time"
 
+	"github.com/hikhvar/mqtt2prometheus/pkg/logging"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
-	kitzap "github.com/go-kit/kit/log/zap"
-	"github.com/go-kit/log"
 	"github.com/hikhvar/mqtt2prometheus/pkg/config"
 	"github.com/hikhvar/mqtt2prometheus/pkg/metrics"
 	"github.com/hikhvar/mqtt2prometheus/pkg/mqttclient"
@@ -228,8 +228,8 @@ func mustSetupLogger() *zap.Logger {
 	return logger
 }
 
-func setupGoKitLogger(l *zap.Logger) log.Logger {
-	return kitzap.NewZapSugarLogger(l, zap.NewAtomicLevelAt(*logLevelFlag).Level())
+func setupGoKitLogger(l *zap.Logger) *slog.Logger {
+	return slog.New(logging.NewZapStdHandler(l))
 }
 
 func setupExtractor(cfg config.Config) (metrics.Extractor, error) {
